@@ -231,3 +231,116 @@ ${param/#pattern/string}		Xbuntu
 
 right edge:
 ${param/%pattern/string 		ubuntuX
+
+
+## Indirection, Element Listing and Length ## 
+name0="name1"; name1="hello"; array=(gnu not unix) 
+indirect expansion: 
+${!name0} 								hello
+
+List names matching prefix "pa":
+${!na*} or "${!na@}"					name0 name1
+
+List keys in array:
+${!array[*]} or "${!array[@]}" 			0 1 2 
+
+Expand to length 
+${#name0} 								5
+${#array}								3
+
+echo ${!BASH*} - expand everything that starts with bash
+echo ${#PATH} - how long is your path
+
+## Indexed Arrays ## 
+
+Assign an array by elements:
+	array=(zero one two "three and more")
+
+Add to an array or modify an element:
+	array+=("four and beyond" [0]=ZERO) 
+
+Recreate array with spaces in elements as underscores:
+	array=("${array[@]// /_}") 
+
+Recreate array only with elements from index 2 to 4:
+	array=("${array[@]:2:3}") 
+
+Print element at index 1 of array (second element):
+	echo "${array[1]}" 
+
+Print all indexes:
+	echo ${!array[@]} 
+
+# Aritmetic Expressions # 
+name++ increment name after evaluation 
+name-- decrement name after evaluation 
+
+++name increment name before evaluation 
+--name decrement name before evaluation 
+
+- + * / % ** <= >= < > == != && || 
+
+- can be used as a test, returning 0 if the comparsion, equality, or inequality is true, or if the calculated number is not zero
+- can provide in-line expansion when used like command substitution - $(( math )) 
+- Bash does not natively support floating point (use awk, perl or something) 
+
+echo $(( 3 + 11 )) 
+echo $(( 3 >= 5 )) 
+echo $(( 0 )) or (( 0 )) 
+echo $(( i++ )) # don't need to put '$'
+
+## Brace Expansion - Arbitrary Word Generation ## 
+
+String generation:
+prefix{ab,cd,ef}suffix 
+
+Sequence generation:
+prefix{x..y}suffix
+
+Sequencing by specified increment (Bash 4+):
+prefix{x..y..incr}suffix
+
+- Bash can complete a list of files into nested brace expansion format with the ESC-{ key combination
+- All key bindings may be displayed with bind -P
+- Brace expansion may be nested and combined
+- The prefix and suffix are optional
+
+echo bash{,e{d,s},ful{,ly,ness},ing}
+echo {1..5}{0,5}%
+echo {10..55..5}%
+echo {g..z..7} 
+touch testfile && cp -v testifle{,.bak} 
+man{,} 
+
+## Compound Commands ##
+
+Iteration:
+Continously loop over list of commands delineated by the keyword do and done 
+
+while until for select 
+
+Conditionals:
+Execute list of commands only under certain conditions 
+
+if case 
+
+Commnd groups:
+Grouped list of command, sharing any external redirections and whose return value is that of the list 
+
+(list) {list;}
+
+## While and Until Loops ## 
+(Typically) iterate based on an external resource
+
+while list0; do list1; done 
+
+Execute list0; if success, excecute list1 and repeat
+Continue until list0 returns a non-zero status (fails)
+
+until list0; do list1; done 
+Execute list0; if failure, execute list1 and repeat
+Continue until list0 returns a status of 0 (succeeds) 
+
+*the following construct is incredibly handy for processing lines of text: while read 
+
+

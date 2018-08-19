@@ -105,3 +105,5 @@ echo "${PATH:+yes you have a PATH, great job}"
 echo "${BASH_VERSION:0:1}"
 
 echo "${PATH##*:}"
+
+echo -e "${PATH//:/\\n}"
