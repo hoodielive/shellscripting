@@ -1,0 +1,121 @@
+Getting help with Bash and your OS 
+
+type: Determine type of comand, list contents of aliases and functions 
+
+help: Display usage information about Bash builtins and keywords 
+
+apropos: Search man pages 
+
+man: System Manual 
+
+info: Advanced manual system primarily used for GNU programs 
+
+General reference commands to get started: 
+	- man bash 
+	- man man 
+	- man -a intro 
+	- help
+	- help help 
+	- info info 
+	- info 
+
+## Some useful defs ##
+
+word: sequence of characters considered to be a single unit 
+
+list: sequence of one or more commands or pipelines
+
+name: a word consisting only of alphanumeric characters and underscores. Can not begin with a numeric character
+
+parameter: an entity that stores values. 
+
+variable: a parameter denoted by a name; there are positional and special parameters
+
+
+## Return Status ##
+
+Success: Command returns a status of 0 
+
+Failure: Command returns a non-zero status
+
+- Valid return values range from 0 to 255 
+- The return value of the last command to have executed is captures in the special parameter $? 
+- Many programs signal different types of failure or error with different return values, which allows us to handle errors programmatically 
+
+true; echo $? # will result in 0, but that's the exit status of the 'echo' command 
+false; echo $? # will result in 1, but that's the exit status of 'false' but the 'echo' will succeed 
+
+## List Operators ##
+list0; list : execute list0, then execute list1. Same as separation by newline 
+
+list0 & list1 : execute list0 in a background subshell and simultaneously execute list1
+
+list0 && list1 : execute list0, then execute list1 if list0 returns status 0
+
+list0 || list2 : execute list0, then execute list2 only if list0 returns a non-zero status 
+
+head -c5000 /dev/urandom | md5sum & echo hello; wait 
+
+(type -a wait; help wait)
+
+true && echo true
+
+false || echo false 
+
+# Conditionals: if 
+
+Ex.1 
+if list0 
+	then list1
+fi 
+
+above_explanation: evaluate list0, then evaluate list1 only if list0 returns status 0 
+
+Ex.2 
+if list0
+	then list1
+	else list2
+fi
+
+above_explanation: evaluate list0, then evaluate list1, only if list0 returns status 0, otherwise, evaluate list2
+
+Ex.3
+if list0
+	then list1
+	elif list2
+		then list3
+		else list4
+fi
+
+above_explanations: evaluate list0, then evaluate list1, only if list0 returns status 0. Otherwise, evaluate list2, then evaluate list3 only if list2 returns status 0. Otherwise, evaluate list4
+
+if fgrep -qi gentoo /etc/os-release 
+then
+	echo "gentoo " 
+else 
+	echo "not gentoo :/" 
+fi
+
+[expression] 
+test expression 
+	Evaluate conditional expression with the test builtin (or the analogous /bin/[or /bin/test commands if specified). 
+
+[[expression]] 
+	Evaluate conditional expression with the [[ keyword. 
+	 - Word splitting is not performed during any parameter expansion 
+	 - The righthand side of a string comparison (==, !=) is treated as a 'pattern when not quoted', as a string when quoted
+	 - Regexes may be matched with the =~ operator 
+	 - short circuiting logical operators && and || can be used to 'combine' condition expressions 
+
+	[[ -e file ]] file exists
+	[[ -f file ]] file is a regular file
+	[[ -d file ]] file is a directory 
+	[[ -t fd ]]   fd is open and refers to a terminal
+	[[ file0 -nt file 1 ]] file0 is newer than file1 
+	[[ file0 -ef file1 ]] file0 is a hard link to file1
+	[[ -n string ]] string is non-empty 
+	[[ -z string ]] string is empty  
+	[[ string0 == "string1" ]] string0 and string1 are the same 
+	[[ string0 != "string1" ]] string0 and string1 are not the same
+	[[ string == pattern ]] string matches pattern 
+	[[ string =~ regex ]] string matches reqular expression
