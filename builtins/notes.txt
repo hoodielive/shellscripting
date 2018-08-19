@@ -119,3 +119,31 @@ test expression
 	[[ string0 != "string1" ]] string0 and string1 are not the same
 	[[ string == pattern ]] string matches pattern 
 	[[ string =~ regex ]] string matches reqular expression
+
+
+## Pattern Matching ##
+
+Pattern matching is used in Bash for the [[ and case keywords, pathname expansion, and some types of parameter expansion 
+
+* matches any string, including null 
+
+? matches any single character 
+
+[character class] matches any one of the characters enclosed between [ and ]. 
+
+[^...] matches the complement (any character 'not' in the class) 
+
+[x-z] matches the range of characters from x to z
+
+[[:class:]] matches according to these POSIX classes:
+ - alnum
+ - alpha
+ - ascii
+ - blank
+ - ctrl
+ - digit
+ - graph
+ - lower
+ - print
+ - punct
+ - space
