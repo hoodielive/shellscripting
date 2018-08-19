@@ -147,3 +147,17 @@ Pattern matching is used in Bash for the [[ and case keywords, pathname expansio
  - print
  - punct
  - space
+
+## case statements ## 
+case word in 
+	pattern0) 
+		list0;;
+	pattern1|pattern2)
+		list1;;
+esac
+
+Explanation: match word against each pattern sequentially. 
+			 When the first match is found, evaluate the list corresponding to that match and
+			 stop matching
+
+Note: the '|' (pipe) character between two patterns entails a match if either pattern matches (inclusive OR)
