@@ -161,3 +161,41 @@ Explanation: match word against each pattern sequentially.
 			 stop matching
 
 Note: the '|' (pipe) character between two patterns entails a match if either pattern matches (inclusive OR)
+
+## Parameters ## 
+Positional parameters: $1 $2 $3 $4 $5 ...${10}.. 
+	- parameters passed to salient command, encapsulating words on the command line as arguments
+
+Special parameters: $* $@ $# $- $$ $0 $! $? $_
+	- parameters providing 'information' about positional parameters, the current shell, and the previous command. 
+
+Variables: 
+	- name=string
+	- parameters which may be assigned values by the user. 
+	- There are also some special shell variables which may provide information
+	- toggle shell options, or configure certain features 
+
+	For variable assignment, "=" must not have adjacent spaces
+
+## Parameter Expansion: Conditionals ## 
+* param is the name of the variable
+* check if variable is unset, empty or non-empty
+
+								unset param						param=""				param="gnu"
+${param-default}                 default						  - 					   gnu
+${param=default} 				name=default					  - 					   gnu
+${param+alternate}				    - 							alternate				 alternate
+${param?error} 					  error							  - 					   gnu
+
+Treat empty as unset:
+${param:-default}				 default						 default				   gnu
+${param:=default}                name=default					 name=default			   gnu
+${param:+alternate}				    - 							  - 					 alternate 
+${param:?error} 				  error 						 error 					   gnu
+
+
+# Preservation of error status #
+
+false
+err=$?
+echo "error: exit code $err"

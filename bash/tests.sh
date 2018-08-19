@@ -85,3 +85,8 @@ esac
 
 set -- one two "three four" five 
 printf "%s\n" "\$1: $1" "\$2: $2" "\$3: $3" "\$4: $4" "\$5: $5" "\$#: $#" "\$*: $*" "\$@: $@" 
+
+false
+err=$?
+echo "error: exit code is $err" 
+
