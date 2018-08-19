@@ -1,7 +1,13 @@
 #!/bin/bash
 [[ $UID == 0 ]] || { echo "run as sudo to install"; exit 1; }
 
-REPO="https://github.com/BurntSushi/ripgrep/releases/download/"
+
+unset REPO; 
+unset RG_LATEST;
+unset RELEASE;
+
+#REPO="https://github.com/BurntSushi/ripgrep/releases/download/"
+REPO="$1"
 RG_LATEST=$(curl -sSL "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | jq --raw-output .tag_name)
 RELEASE="${RG_LATEST}/ripgrep-${RG_LATEST}-x86_64-unknown-linux-musl.tar.gz"
 
