@@ -199,3 +199,35 @@ ${param:?error} 				  error 						 error 					   gnu
 false
 err=$?
 echo "error: exit code $err"
+
+
+# Parameter Expansion: Substrings # 
+param="mandrake"
+
+Extraction							offset of 3, length 2
+${param:offset}						drake
+${param:offset:length}				dr
+
+Removal from left edge:				pattern is "*a"
+${param#pattern}					ndrake
+${param##pattern}					ke
+
+Removal from right edge				pattern is "a*"
+${param%pattern}					mandr
+${param%%pattern} 					m 
+ex.
+	echo "${BASH_VERSION:0:1}" 
+
+
+## Parameter Expansion: Pattern Substitution ##
+param=ubuntu
+
+Substitution 					pattern is 'u?', string is 'X'
+${param/pattern/string}			Xuntu
+${param//pattern/string}        XXtu
+
+left edge:
+${param/#pattern/string}		Xbuntu
+
+right edge:
+${param/%pattern/string 		ubuntuX

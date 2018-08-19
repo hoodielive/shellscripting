@@ -86,7 +86,22 @@ esac
 set -- one two "three four" five 
 printf "%s\n" "\$1: $1" "\$2: $2" "\$3: $3" "\$4: $4" "\$5: $5" "\$#: $#" "\$*: $*" "\$@: $@" 
 
+
+# test 10 preservation of error status
+
 false
 err=$?
 echo "error: exit code is $err" 
 
+# test 11 parameter expansion - conditionals 
+
+param=gnu; echo "${param:-default value for expansion}" 
+unset param; echo "${param:-default value for expansion}" 
+
+#echo "${param:?a nifty custom error string}"
+
+echo "${PATH:+yes you have a PATH, great job}" 
+
+echo "${BASH_VERSION:0:1}"
+
+echo "${PATH##*:}"
