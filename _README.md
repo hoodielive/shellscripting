@@ -17,3 +17,7 @@ Lets Play with Shells
 ## Forwards and Backwards
 1. builtins - effect the shell *context* 
 
+Task: replace every occurence of '\\\' with some to-be-defined value (value is supplied in variable) and the search pattern is '\\\'
+As a regex that's: 
+	\\\\\\ 
+
