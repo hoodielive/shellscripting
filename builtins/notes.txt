@@ -343,4 +343,35 @@ Continue until list0 returns a status of 0 (succeeds)
 
 *the following construct is incredibly handy for processing lines of text: while read 
 
+# For and Select Loops #
+
+*iterate based on command line args 
+
+for name in words; do list; done 
+
+* During each iteration, assign name the value of the next word, then execute list.
+* Repeat until all words have been exhausted 
+
+	initialization					condition 					afterthought
+	for (( expr0 ; expr1; expr2 )); do list; done
+
+* Evaluate expr0, then loop over ((expr1)) || break; { list; ((expr2));} - that is to say execute list only if expr1 returns non-zero status (fails), evaluating expr2 after each iteration. The expressions are evaluated as arithmetic expressions, and the list as a regular command list. 
+
+select name in words, do list; done 
+
+Create a menu with each word as an item. When the user makes a selection, name is assigned the value of the selected word, REPLY is assigned the index number of the selection, and list is executed.
+
+# While and Until Loops # Again!!!
+* typically iterate based on an external source 
+
+while list0; do list1; done 
+
+Execute list0; if success, execute list1 and repeat. 
+Continue until list0 returns a non-zero status (fails).
+
+until list0; do list1; done 
+
+Execute list0; if failure, execute list1 and repeat.
+Continue until list0 returns a status of 0 (succeeds) 
+
 
