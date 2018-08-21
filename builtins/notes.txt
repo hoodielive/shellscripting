@@ -375,3 +375,102 @@ Execute list0; if failure, execute list1 and repeat.
 Continue until list0 returns a status of 0 (succeeds) 
 
 
+while and until:
+ls -l | while read file 
+do 
+	echo "$(stat -c"%a %A" "$
+done
+
+for and select:
+for file in *
+do
+    echo "$(stat -c"%a %A" "$
+done 
+
+for i in one two "three four" 
+do 
+	echo "_-_-_-$i-_-_-_"
+done
+
+for (( i=0; i < 5 ; i++ )) 
+do
+	echo $i
+done
+
+((i=0)) 
+while :
+do
+   ((i < 5)) || break
+   { echo $i; ((i++)); } 
+done
+
+"ydiff | hl --style clarity"
+
+select choice in one two "three four"
+do
+	echo "$REPLY : $choice"
+done 
+
+select file in * 
+do 
+	stat "$file"
+	break
+done
+
+# Command Groups #
+Treat group as single unit for redirection and branching
+
+Subshell:
+Evaluate list of commands in a subshell, meaning that its environment is distinct from the current shell and its parameters are contained.
+
+The righthand side of a pipe is always a subshell (list) 
+
+Group command
+Evaluate list of commands in the current shell, sharing the current shell, sharing the current shell's environment and parameter scope
+{ list; } -> the spaces and trailing semicolon are obligatory 
+
+unset x 
+(x=hello; echo "x: $x") 
+echo "x: $x"
+
+unset x 
+{ x=hello; echo "x: $x"; } 
+echo "x: $x"
+{ x=hello; echo "x: $x"; } > /dev/null
+
+
+# Associative Arrays #
+Assign an array by elements:
+
+declare -A array=(
+	[item]=almonds [price]=7.32)
+
+Add to or modify elements in an array:
+	array+=([type]="fresh curds")
+
+Copy array:
+	declare -n array2=array
+
+List array keys:
+	echo "${!array[@]}" 
+
+List array values:
+	echo "${array[@]}" 
+
+* Associative arrays ( array[key]=value ) may be created in BASH4 and greater with declare -A array
+
+declare -A assoc=( [port]=443 [service]="Secure HTTP" ) 
+
+for key in "${!assoc[@]]}"; do 
+	printf "key: \"%s\"\n value: \"%s\"\n" "$key" "${assoc[$key]}"
+done 
+
+declare -A file_sizes
+for file in *; do 
+	[[ -f "$file" ]] && \
+		files_sizes+=( ["$file"]=$(wc -c < "$file") ) 
+done
+
+for file in "${!files_sizes[@]}"; do
+	printf "bytes: %-15s file: \"%s\"\n" "${files_sizes[$file]}" "${file}"
+done
