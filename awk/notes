@@ -1,0 +1,5 @@
+AWK commands
+- search data in file and Print data to stdout 
+- find data by patterns 
+- format output 
+- used on files with bulk data [ searching, conditional execution, updating and filtering ]
