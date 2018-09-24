@@ -1,9 +1,0 @@
-#!/bin/bash 
-
-# lets look at parameters a little deeper 
-testfunc() {
-  echo "$# parameters"; 
-  echo "$@"; 
-}
-
-testfunc 
