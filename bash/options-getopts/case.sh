@@ -21,7 +21,7 @@ case "${1}" in
   stop) 
     echo "Stopping..."
     ;; 
-  status) 
+  status|state|--status|--state) 
     echo "Status is as follows: "
     ;;
   *) 
