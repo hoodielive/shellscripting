@@ -16,12 +16,9 @@
 #       CREATED: 09/29/2018 10:53:57 AM
 #      REVISION:  ---
 #===============================================================================
-
-set -o nounset                                  # Treat unset variables as an error
-unset VERBOSE
-VERBOSE=false;
-
 log() {
+  local VERBOSE="${1}"
+  shift 
   local MESSAGE="${@}"
   if [[ ${VERBOSE} = "true" ]]
   then
@@ -29,6 +26,6 @@ log() {
   fi
 }
 
-log "This is the message I have for you"
-VERBOSE='true'
-log "this is fun!"
+VERBOSITY='true'
+log "${VERBOSITY}" 'This is the message I have for you'
+log "${VERBOSITY}" 'this is fun!' 
