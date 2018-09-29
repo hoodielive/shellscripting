@@ -1,0 +1,7 @@
+get help 
+dir() 
+dir(sys)
+help(sys)
+pydoc sys
+pydoc -p 8000 
+
