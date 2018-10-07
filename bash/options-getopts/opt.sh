@@ -3,5 +3,7 @@
 
 unset FIND_MEMBER 
 
-while getopts hq:r:a in 
- case i
+FIND_MEMBER=/usr/lib/mailman/bin/find_member
+
+while getopts hqr: opt; do
+ case $opt in
