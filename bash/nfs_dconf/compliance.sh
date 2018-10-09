@@ -1,7 +1,8 @@
 #!/bin/bash 
 
 
-# check to see if any users are logged in
+#check to see if any users are logged in
+
 # cd into the directories 
 # check for the existence of file 
 # if file exists it meets compliance then log it and make a report
