@@ -1,0 +1,154 @@
+#!/bin/sh
+#
+# Copyright (c) 2008 by Bruce Blinn
+#
+# NAME
+#	DirCmp - compare the files in two directories
+#
+# SYNOPSIS
+#	DirCmp [-v] [dir1] dir2
+#
+# DESCRIPTION
+#	This command compares the files in two directories and lists
+#	the files that are not the same.  There will be three
+#	separate lists for: 
+#
+#	1. Files not in the first directory, but in the second.
+#	2. Files not in the second directory, but in the first.
+#	3. Files in both directories, but not the same.
+#
+# OPTIONS
+#	-v	Verbose.  For files that are in both directories but
+#		not the same, print the lines that are different
+#		in addition to the name of the file.
+# RETURN VALUE
+#	0	The directories are the same.
+#	1	Error - see the message written to standard error.
+#	2	The directories are not the same.
+#
+####################################################################
+CMDNAME=$(basename $0)
+USAGE="Usage: $CMDNAME [-v] [dir1] dir2"
+VERBOSE=FALSE			# Verbose option.
+CURDIR=$(pwd)			# Current directory.
+FOUND=FALSE			# Differences found?
+HEADER_PRINTED=			# Has header been printed?
+DIR1=				# Name of source directory.
+DIR2=				# Name of target directory.
+DIR1_FILES=/tmp/files1.$$	# List of files in dir1.
+DIR2_FILES=/tmp/files2.$$	# List of files in dir2.
+ALL_FILES=/tmp/allfiles.$$	# List of files in dir1 or dir2.
+COMMON_FILES=/tmp/comfiles.$$	# List of files in dir1 and dir2.
+TMP=/tmp/tmp.$$			# Temporary file.
+
+trap 'rm -f /tmp/*.$$' EXIT
+
+while getopts v OPT
+do
+	case $OPT in
+		v)	VERBOSE=TRUE
+			;;
+		\?)	echo "$USAGE" 1>&2
+			exit 1
+			;;
+	esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -eq 1 ]; then
+	DIR1="."
+	DIR2="$1"
+elif [ $# -eq 2 ]; then
+	DIR1="$1"
+	DIR2="$2"
+else
+	echo "$USAGE" 1>&2
+	exit 1
+fi
+
+if [ ! -d $DIR1 ]; then
+	echo "$DIR1 is not a directory." 1>&2
+	exit 1
+fi
+
+if [ ! -d $DIR2 ]; then
+	echo "$DIR2 is not a directory." 1>&2
+	exit 1
+fi
+
+#
+# Create the lists of files to compare.
+#
+cd $DIR1
+find . \( -type f -o -type l \) -print	|
+	sed "s/^..//" >$DIR1_FILES
+cd $CURDIR
+
+cd $DIR2
+find . \( -type f -o -type l \) -print	|
+	sed "s/^..//" >$DIR2_FILES
+cd $CURDIR
+
+cat $DIR1_FILES $DIR2_FILES | sort | uniq	>$ALL_FILES
+cat $DIR1_FILES $DIR2_FILES | sort | uniq -d	>$COMMON_FILES
+
+#
+# Print the files that are in dir2, but not in dir1.
+#
+cat $DIR1_FILES $ALL_FILES | sort | uniq -u >$TMP
+if [ -s $TMP ]; then
+	FOUND=TRUE
+	echo ""
+	echo "Files missing from $DIR1:"
+	for f in $(cat $TMP)
+	do
+		echo "	$f"
+	done
+fi
+
+#
+# Print the files that are in dir1, but not in dir2.
+#
+cat $DIR2_FILES $ALL_FILES | sort | uniq -u >$TMP
+if [ -s $TMP ]; then
+	FOUND=TRUE
+	echo ""
+	echo "Files missing from $DIR2:"
+	for f in $(cat $TMP)
+	do
+		echo "	$f"
+	done
+fi
+
+#
+# Print the files that are in dir1 and dir2, but are not
+# the same.
+#
+HEADER_PRINTED=FALSE
+for f in $(cat $COMMON_FILES)
+do
+	cmp -s $DIR1/$f $DIR2/$f
+	if [ $? -ne 0 ]; then
+		FOUND=TRUE
+		if [ "$HEADER_PRINTED" != "TRUE" ]; then
+			HEADER_PRINTED=TRUE
+			echo ""
+			echo "Files that are not the same:"
+		fi
+
+		if [ "$VERBOSE" = "TRUE" ]; then
+			echo ""
+			echo "File: $f"
+			diff $DIR1/$f $DIR2/$f
+		else
+			echo "	$f"
+		fi
+	fi
+done
+
+if [ $FOUND = TRUE ]; then
+	exit 2
+else
+	echo "The directories are the same."
+	exit 0
+fi

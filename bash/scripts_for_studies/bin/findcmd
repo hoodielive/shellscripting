@@ -1,0 +1,79 @@
+#!/bin/sh
+#
+# Copyright (c) 2008 by Bruce Blinn
+#
+# NAME
+#	findcmd - search for a command
+#
+# SYNOPSIS
+#	findcmd command
+#
+# DESCRIPTION
+#	This command will search the directories listed in the PATH
+#	variable for the command.  It makes a reasonable attempt to
+#	find the same command as would be found by the shell, except
+#	that it does not find functions or built-in commands:
+#
+#	1. If the command name contains a /, the PATH variable is
+#	   not used.
+#	2. The directories in the PATH variable are searched in
+#	   order from left to right.
+#	3. Files without execute access are ignored even if the file
+#	   name matches the command name.
+#	4. The search concludes when the first match is found.
+#
+# RETURN VALUE
+#	0	Command was found.
+#	1	Error - see the message written to standard error.
+#	2	Command was not found.
+#
+####################################################################
+CMDNAME=$(basename $0)
+USAGE="Usage: $CMDNAME command"
+COMMAND=		# Command being searched for.
+FOUND=FALSE		# Has the command been found?
+OLD_IFS=$IFS		# Original value of IFS variable.
+TMP_PATH=		# For parsing PATH variable.
+
+if [ $# -ne 1 ]; then
+	echo "$USAGE" 1>&2
+	exit 1
+fi
+
+COMMAND=$1
+
+case $COMMAND in
+	*/* )	if [ -x "$COMMAND" -a ! -d "$COMMAND" ]; then
+			echo "$COMMAND"
+			FOUND=TRUE
+		fi
+		;;
+
+	* )	TMP_PATH=$(echo $PATH |
+				sed -e 's/^:/.:/'	\
+				    -e 's/::/:.:/g'	\
+				    -e 's/:$/:./')
+
+		IFS=:
+		set $TMP_PATH
+		IFS=$OLD_IFS
+
+		for dir
+		do
+			if [ -x "$dir/$COMMAND" -a \
+			     ! -d "$dir/$COMMAND" ]
+			then
+				echo "$dir/$COMMAND"
+				FOUND=TRUE
+				break
+			fi
+		done
+		;;
+esac
+
+if [ "$FOUND" = "FALSE" ]; then
+	echo "$COMMAND not found" 1>&2
+	exit 2
+else
+	exit 0
+fi

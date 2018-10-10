@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# Copyright (c) 2008 by Bruce Blinn
+#
+# NAME
+#	Cat - concatenate files
+#
+# SYNOPSIS
+#	Cat [file ...]
+#
+# DESCRIPTION
+#	This command concatenates the specified files by reading
+#	each file in sequence and writing it to the standard output.
+#
+# RETURN VALUE
+#	0	Successful completion.
+#	1	One or more files were not found; see the message
+#		written to standard error.
+#
+####################################################################
+CMDNAME=$(basename $0)
+ERROR=0			# Has there been an error (0=no, 1=yes)?
+LINE=			# Line read from file.
+OLD_IFS=$IFS
+
+while [ $# -gt 0 ]
+do
+	if [ ! -r "$1" ]; then
+		echo "$CMDNAME: Cannot find file $1" 1>&2
+		ERROR=1
+	else
+		IFS=
+		while read -r LINE
+		do
+			echo "$LINE"
+		done <"$1"
+		IFS=$OLD_IFS
+	fi
+	shift
+done
+
+exit $ERROR

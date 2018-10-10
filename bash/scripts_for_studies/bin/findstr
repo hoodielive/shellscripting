@@ -1,0 +1,75 @@
+#!/bin/sh
+#
+# Copyright (c) 2008 by Bruce Blinn
+#
+# NAME
+#	findstr - search for files that contain a string
+#
+# SYNOPSIS
+#	findstr [-iv] string [fileName]
+#
+# DESCRIPTION
+#	This command searches the files in the current directory and
+#	its subdirectories for the string.  The name of each file
+#	that contains the string is printed.
+#
+#	The string may be a simple string or it may be any regular
+#	expression accepted by the grep -E command.  If the string
+#	contains whitespace or any other metacharacter, it must be
+#	quoted.
+#
+#	The search can be restricted to files with a particular name
+#	by specifying the file name parameter.  This parameter may
+#	contain wildcard characters to restrict the search to file
+#	names that match a pattern, but if it does, the file name
+#	must be quoted so the wildcard characters will be processed
+#	inside this shell script rather than being expanded into
+#	file names on the command line.  For example:
+#
+#		findstr foo "*.c"
+#
+# OPTIONS
+#	-i	Ignore the case of the string.
+#
+#	-v	Verbose.  Print the lines that contain the string in
+#		addition to the names of the files.
+#
+# RETURN VALUE
+#	0	Successful completion.  It is not an error if the
+#		string is not found.
+#
+#	1	Error - see the message written to standard error.
+#
+####################################################################
+CMDNAME=$(basename $0)
+USAGE="Usage: $CMDNAME [-iv] string [fileName]"
+STRING=			# String being search for.
+FILENAME=		# Name of the files to check.
+I=			# Option for grep; Ignore case.
+L=-l			# Option for grep; List names only.
+
+while getopts iv OPT
+do
+	case $OPT in
+		i)	I=-i	;;	# Ignore case
+		v)	L=	;;	# Verbose
+
+		\?)	echo "$USAGE" 1>&2
+			exit 1
+			;;
+	esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -lt 1 -o $# -gt 2 ]; then
+	echo "$USAGE" 1>&2
+	exit 1
+fi
+
+STRING=$1
+FILENAME=${2:-"*"}
+
+find . \( -type f -o -type l \) -name "$FILENAME" -follow -print |
+	sort							 |
+	sed -e 's/^/"/' -e 's/$/"/'				 |
+	xargs -e grep -E $I $L -- "$STRING" /dev/null

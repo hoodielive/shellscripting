@@ -1,0 +1,143 @@
+#!/bin/sh
+#
+# Copyright (c) 2008 by Bruce Blinn
+#
+# NAME
+#	ptree - print a process tree
+#
+# SYNOPSIS
+#	ptree [-v][-k | -signal | -s signal] processID [level mypid]
+#
+# DESCRIPTION
+#	This command will print the process tree for the specified
+#	process.
+#
+#	NOTE: The level and mypid parameters should not be used.
+#	They are only used when this command calls itself
+#	recursively to print the next level of the process tree.
+#
+# OPTIONS
+#	-k	Kill the processes.  That is, send the SIGTERM
+#		signal to each process after it is printed.
+#
+#	-signal or -s signal
+#		Send the specified signal to each process after it
+#		is printed.  Either the signal number or the signal
+#		name may be used.  For example:
+#
+#			ptree -s 9 processID
+#			ptree -s SIGKILL processID
+#			ptree -9 processID
+#			ptree -SIGKILL processID
+#
+#		If this option is not specified, no signal will be
+#		sent to the process(es).
+#
+#	-v	Verbose.
+#
+# RETURN VALUE
+#	0	Successful completion.
+#	1	Error - see the message written to standard error.
+#
+####################################################################
+CMDNAME=$(basename $0)
+USAGE="Usage: $CMDNAME [-v][-k | -signal | -s signal] processID"
+VERBOSE=FALSE		# Verbose option.
+VOPT=			# Verbose option for recursion.
+SIGNAL=			# Signal to send to the processes.
+PID=			# PID of the starting process.
+LEVEL=			# Indentation level (num parents).
+MYPID=			# Process ID of this command.
+INDENT=			# Column number where line begins.
+LINE=			# Line of output.
+NAME=			# Name of the process.
+CHILDREN=		# PIDs of children.
+CHILD=			# Iteration variable for CHILDREN.
+
+. Process.sh
+. Strings.sh
+
+while :
+do
+	case $1 in
+		-[1-9]*)
+			SIGNAL="$1"
+			shift
+			;;
+		-SIG*)	SIGNAL="$1"
+			shift
+			;;
+		-k)	SIGNAL="-s SIGTERM"
+			shift
+			;;
+		-s)	SIGNAL="-s $2"
+			shift 2
+			;;
+		-s*)	SIGNAL="$1"
+			shift
+			;;
+		-v)	VERBOSE=TRUE
+			VOPT="-v"
+			shift
+			;;
+		--)	shift
+			break
+			;;
+		-*)	echo "$USAGE" 1>&2
+			exit 1
+			;;
+		*)	break
+			;;
+	esac
+done
+
+if [ $# -eq 1 ]; then
+	PID=$1
+	LEVEL=0
+	MYPID=$$
+elif [ $# -eq 3 ]; then
+	PID=$1
+	LEVEL=$2
+	MYPID=$3
+else
+	echo "$USAGE" 1>&2
+	exit 1
+fi
+
+if [ "$VERBOSE" = "TRUE" ]; then
+	NAME=$(pcommand $PID)
+else
+	NAME=$(pname $PID)
+fi
+
+INDENT=$((LEVEL * 2))
+LINE=$(StrFill $INDENT "")
+LINE="$LINE$PID"
+LINE=$(StrFill 30 "$LINE")
+LINE="$LINE$NAME"
+echo "$LINE"
+
+#
+# Do not print the children of this command; it will cause an
+# infinite loop.
+#
+if [ "$PID" = "$MYPID" ]; then
+	exit 0
+fi
+
+CHILDREN=$(cpid $PID)
+if [ "$CHILDREN" != "" ]; then
+	#
+	# For every process that is a child of the current process,
+	# invoke this command ($0) recursively.
+	#
+	LEVEL=$((LEVEL + 1))
+	for CHILD in $CHILDREN
+	do
+		$0 $VOPT $SIGNAL $CHILD $LEVEL $MYPID
+	done
+fi
+
+if [ "$SIGNAL" != "" ]; then
+	kill $SIGNAL $PID
+fi

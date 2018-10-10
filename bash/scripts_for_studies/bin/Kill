@@ -1,0 +1,102 @@
+#!/bin/sh
+#
+# Copyright (c) 2008 by Bruce Blinn
+#
+# NAME
+#	Kill - kill a process (send a signal) by name
+#
+# SYNOPSIS
+#	Kill [-signal | -s signal] processName
+#
+# DESCRIPTION
+#	This command will send a signal to any process with the
+#	specified name.  For each process that is found, the user
+#	will be asked for confirmation before sending the signal to
+#	the process.
+#
+# OPTIONS
+#	-signal or -s signal
+#		This option specifies the signal to send to the
+#		process(es).  Either the signal number or the signal
+#		name may be used.  For example:
+#
+#			Kill -s 9 processName
+#			Kill -s SIGKILL processName
+#			Kill -9 processName
+#			Kill -SIGKILL processName
+#
+#		If this option is not specified, SIGTERM will be
+#		sent to the process(es).
+#
+# RETURN VALUE
+#	0	Successful completion.  It is not an error if the
+#		process is not found.
+#
+#	1	Error - see the message written to standard error.
+#
+####################################################################
+CMDNAME=$(basename $0)
+USAGE="Usage: $CMDNAME [-signal | -s signal] processName"
+SIGNAL=			# Signal option for the kill(1) command.
+NAME=			# Name of process to kill.
+PID=			# PID of process being checked.
+OWNER=			# Owner of process being checked.
+
+. GetYesNo.sh
+. Process.sh
+
+while [ $# -gt 0 ]
+do
+	case $1 in
+		-[1-9]*)
+			SIGNAL="$1"
+			shift
+			;;
+		-SIG*)	SIGNAL="$1"
+			shift
+			;;
+		-s)	SIGNAL="-s $2"
+			shift 2
+			;;
+		-s*)	SIGNAL="$1"
+			shift
+			;;
+		--)	shift
+			break
+			;;
+		-*)	echo "$USAGE" 1>&2
+			exit 1
+			;;
+		*)	break
+			;;
+	esac
+done
+
+if [ $# -ne 1 ]; then
+	echo "$USAGE" 1>&2
+	exit 1
+fi
+
+NAME=$1
+PIDS=$(pid $NAME)
+if [ "$PIDS" = "" ]; then
+	echo "Process \"$NAME\" not found."
+	exit 0
+fi
+
+#
+# Print title.
+#
+echo "PID	Owner	Process"
+
+for PID in $PIDS
+do
+	#
+	# Ask user.
+	#
+	OWNER=$(powner $PID)
+	if GetYesNo "$PID	$OWNER	$NAME (y/n)? "
+	then
+		kill $SIGNAL $PID
+	fi
+done

@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# Copyright (c) 2008 by Bruce Blinn
+#
+# NAME
+#	Shar - create a shell archive
+#
+# SYNOPSIS
+#	Shar file ...
+#
+# DESCRIPTION
+#	This command creates a shell archive that contains the files
+#	listed on the command line.  The shell archive is written to
+#	the standard output.  To unpack the shell archive, enter the
+#	following command, where archive is the name of the shell
+#	archive.
+#
+#		sh archive
+#
+# RETURN VALUE
+#	0	Successful completion.
+#	1	Error - see the message written to standard error.
+#
+####################################################################
+CMDNAME=$(basename $0)
+USAGE="Usage: $CMDNAME file ..."
+
+if [ $# -eq 0 ]; then
+	echo "$USAGE" 1>&2
+	exit 1
+fi
+
+echo "#!/bin/sh"
+echo "# This is a shell archive; to unpack:"
+echo "# 1. Remove everything before \"#!/bin/sh\"."
+echo "# 2. Save the rest of the archive."
+echo "# 3. Execute the archive by entering \"sh archive\"."
+echo "#"
+echo "# This archive contains the following files:"
+echo "#"
+
+for FILE
+do
+	echo "#	$FILE"
+done
+
+for FILE
+do
+	echo ""
+	echo "if [ -f $FILE ]; then"
+	echo "	echo The file $FILE already exists."
+	echo "else"
+	echo "	echo Extracting $FILE"
+	echo "	sed 's/^X//' >$FILE <<\EOF"
+	sed 's/^/X/' <$FILE
+	echo "EOF"
+	echo "fi"
+done

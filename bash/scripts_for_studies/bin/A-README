@@ -1,0 +1,44 @@
+This directory contains the examples from the book "Shell Programming
+Examples for the Bash Shell and Korn Shell" by Bruce Blinn.  The files
+in this directory may be copied freely provided that the copyright notice
+appears in all files.  There is no warranty, either expressed or implied,
+provided with this code.
+
+The following files are contained in this directory:
+
+Chapter 1
+	append			Append to file.
+
+Chapter 10
+	Clear.sh		Clear the terminal screen.
+	FullName.sh		Print the full name of a file or directory.
+	GetYesNo.sh		Ask a "yes" or "no" question.
+	IsNewer.sh		Compare the dates of two files.
+	IsNumeric.sh		Determine if a string is numeric.
+	Process.sh		Process information utilities.
+	Prompt.sh		Print a message without a newline.
+	Question.sh		Ask a question.
+	Strings.sh		String utilities.
+	tty.sh			Utilities for printing to terminals.
+
+Chapter 11
+	Cat			Concatenate files.
+	DirCmp			Compare the files in two directories.
+	Exec			Execute a command.
+	Kill			Kill a process (send signal) by name.
+	Rsh			Execute a command on a remote system.
+	Shar			Create a shell archive.
+	Wc			Recursive version of the wc command.
+	addcolumn		Add a column of numbers.
+	cpid			Print the process IDs of child processes.
+	dircopy			Copy a directory.
+	findcmd			Search for a command.
+	findfile		Search for a file.
+	findprocess		Find a process by name.
+	findstr			Search files for a string.
+	number			Convert a number to a different radix.
+	pcommand		Print the command line executed by a process.
+	pname			Print the name of a process.
+	ppid			Print the process ID of the parent process.
+	ptree			Print a process tree.
+	replace			Replace a string in multiple files.
