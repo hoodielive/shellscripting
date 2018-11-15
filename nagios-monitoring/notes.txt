@@ -67,3 +67,9 @@ Return code: Status: Desc
 
 So our plugin will check a service, evaluate the results, and based on a threshold, will return Nagios one of the values listed in the tables
 and a meaningful message. 
+
+$HOSTADDRESS$ -> Nagios Standard macro as a placeholder which will be instaniated by Nagios with the host address of the host to associate 
+the service making use of this command. 
+
+define command 
+define service
