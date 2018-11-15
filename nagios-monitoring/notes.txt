@@ -1,0 +1,53 @@
+Scripting really boils down to answering some simple questions? 
+
+1. What do we really want to accomplish? 
+2. How much time do we have? 
+3. Do we have all the resources needed? 
+4. Do we have the knowledge required for the task? 
+
+Nagios plugin development requires a broad understanding of how this monitoring system is and how to make a script dynamically interact with
+other programs.
+
+Nagios:
+
+- One of the most widely adopted open source IT infrastructure monitoring tools, whose main interesting feature is the fact that it does not
+  know how to monitor anything.
+
+- Its an evaluating core, which takes some information as input and reacts accordingly.
+
+- How the information is gathered is not the main concern of this tool. 
+
+- Leaves the task of getting the monitored data to an external plugin, which knows the following details: 
+  - How to connect to the monitored services.
+  - How to collect the data from monitored services.
+  - How to evaluate the data.
+  - How to inform Nagios if the values gathered are beyond or in the boundaries to raise an alarm.
+
+-  Decisions are based on the configuration set; the core triggers the plugin to monitor a service, the plugin itself returns some
+   information and Nagios makes a decision about: 
+    - whether to raise an alarm.
+    - send a notification.
+    - whom to notify.
+    - for how long.
+    - What, if any action is taken in order to get back to normality.
+
+Active and Passive Checks 
+
+- There are 2 different kinds of check:   
+  1. Active 
+  2. Passive 
+
+Passive Checks:
+  - In this case, Nagios, does NOT trigger anything but waits to be contacted by the service, which must be monitored. 
+  
+  For ex: 
+  How would you monitor if a disk backup has been compelled successfully? 
+    - by knowing when the backup task starts and how long it lasts, we can define a 'time' and invoke a script to check the 'task' at 
+      a given period. 
+
+    Note: when we plan something, we 'must' have a full understanding of how real life goes and a backup is not a little pet in the living
+    room, its rather a beast, which does what it wants. 
+
+    - a backup to last a variable amount of time and is thus unpredictable! 
+
+  - The best approach to monitoring is letting the 'service' itself notify us when it finished its task and what was its outcome. 
