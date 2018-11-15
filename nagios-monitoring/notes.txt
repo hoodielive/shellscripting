@@ -50,4 +50,20 @@ Passive Checks:
 
     - a backup to last a variable amount of time and is thus unpredictable! 
 
-  - The best approach to monitoring is letting the 'service' itself notify us when it finished its task and what was its outcome. 
+  - The best approach to this type of monitoring is letting the 'service' itself notify us when it finished its task and what was its outcome. 
+  - Which is accomplished with SNMP (Simple Network Monitoring Protocol) to trap a destination to inform it of an outcome.
+  - We would do this with Nagios and add an event horizon so that if we do not receive the specific trap within 24 hours - raise alarm!
+  - If the backup gets completed or when it gets timed out, etc., we receive a notification. 
+
+Returning Code and thresholds:
+
+Return code: Status: Desc
+
+0    OK            The plugin checked the service and the results that are inside the acceptable range. 
+1    Warning       The plugin checked the service and the results that are above a WARNING threshold. Keep eye on service. 
+2    Critical      The plugin checked the service and the results that are above a Critical threshold or the service is not responding.
+                   We must react NOW! 
+3    Unknown       Either we passed the wrong arguments to the plugin or there is some internal error in it. 
+
+So our plugin will check a service, evaluate the results, and based on a threshold, will return Nagios one of the values listed in the tables
+and a meaningful message. 
