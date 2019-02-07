@@ -3,3 +3,14 @@ AWK commands
 - find data by patterns 
 - format output 
 - used on files with bulk data [ searching, conditional execution, updating and filtering ]
+
+
+Pattern 
+# this is a pattern-only statement
+awk '/Ori/' empinfo.txt # finds pattern and returns it to stdout
+
+Action
+# this is an action-only statement
+awk '{ print $1 }' empinfo.txt # represents this first field
+
+
