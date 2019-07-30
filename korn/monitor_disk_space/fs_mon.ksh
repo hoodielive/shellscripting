@@ -1,6 +1,6 @@
 #!/usr/bin/env ksh
 
-set -x # add debug
+# set -x # add debug
 
 FSMAX="85"
 WORKFILE="/var/tmp/df.work"
