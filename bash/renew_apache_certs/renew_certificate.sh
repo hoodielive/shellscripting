@@ -9,7 +9,7 @@ unset NEW_CSR
 unset NEW_KEY
 unset NEW_BUNDLE
 
-DATE=$(date)
+DATE=$(date) # Parse year from date command.
 OLD_CERT=0
 OLD_CSR=0
 OLD_KEY=0
@@ -47,8 +47,9 @@ figure_out_year() {
 }
 
 OPTIND=1
-while getopts rqh:p: OPT ; do
+while getopts drqh:p: OPT ; do
 	case $OPT in
+		d) debug=$OPTARG ;;
     r) renew_cert=$OPTARG ;; 
     q) query_cert=$OPTARG ;;
 		h) get_help=$OPTARG ;;
@@ -58,6 +59,14 @@ while getopts rqh:p: OPT ; do
 done
 shift $(( $OPTIND - 1 ))
 
+# @Enable Debugging?
+if [ ${OPTARG} == "d" ]; then
+	set -x
+else
+	echo "Do nothing."
+fi
+
+# @Cert Renewal?
 if [ ${OPTARG} == "r" ]; then
 	echo -n "Cert renewal for which domain?"
 	read -p DOMAIN
@@ -81,13 +90,14 @@ fi
 	read -p ANSWER
 
 	if [ ${ANSWER} == "yes" ]; then
-			# Decommission old certificates.
+
+			# @Decommission old certificates.
 			unlink /etc/pki/tls/private/${DOMAIN_KEY}.${OLD_YEAR}.key
 			unlink /etc/pki/tls/private/${DOMAIN_CSR}.${OLD_YEAR}.csr
 			unlink /etc/pki/tls/certs/${DOMAIN}.${OLD_YEAR}.crt
 			unlink /etc/pki/tls/certs/${DOMAIN_BUNDLE}.${OLD_YEAR}.crt
 
-			# Put new year certs in place.
+			# @Commission new certificates.
 			ln -s /etc/pki/tls/private/${DOMAIN_KEY}.${NEW_YEAR}.key /etc/pki/tls/private/${DOMAIN_KEY}.key
 			ln -s /etc/pki/tls/private/${DOMAIN_CSR}.${NEW_YEAR}.csr /etc/pki/tls/private/${DOMAIN_CSR}.csr
 			ln -s /etc/pki/tls/certs/${DOMAIN}.${NEW_YEAR}.crt /etc/pki/tls/certs/${DOMAIN}.crt
