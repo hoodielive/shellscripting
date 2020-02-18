@@ -58,7 +58,7 @@ else
 fi
 
 # @Cert Renewal?
-if [ "${OPTARG} " == "r" ]; then
+if [ "${RENEW_CERT} " == "1" ]; then
 	echo "For what domain are you renewing?"
 	read THE_DOMAIN
 
