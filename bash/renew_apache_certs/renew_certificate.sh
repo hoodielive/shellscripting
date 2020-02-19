@@ -11,21 +11,9 @@ unset NEW_YEAR
 log_begin_msg_pre() { :; }
 log_begin_msg_post() { :; }
 
-log_warning_msg () {
-    if [ -n "${1:-}" ]; then
-        log_begin_msg $@ "..."
-    fi
-    log_end_msg 255 || true
-}
+log_warning_msg () { if [ -n "${1:-}" ]; then log_begin_msg $@ "..." fi log_end_msg 255 || true }
 
-log_begin_msg() {
-	log_begin_msg_pre "$@"
-	if [ -z "${1:-}" ]; then
-		return 1
-	fi
-	echo -n "$@" || true
-	log_begin_msg_post "$@"
-}
+log_begin_msg() { log_begin_msg_pre "$@" if [ -z "${1:-}" ]; then return 1 fi echo -n "$@" || true log_begin_msg_post "$@" }
 
 figure_out_year() {
 	echo  "What year is the renewal for? "
