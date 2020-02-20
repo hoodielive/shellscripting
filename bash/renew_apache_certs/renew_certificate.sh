@@ -5,8 +5,6 @@ set -x
 unset THE_DOMAIN
 unset NEW_YEAR
 
-
-
 # Functions
 log_begin_msg_pre() { :; }
 log_begin_msg_post() { :; }
