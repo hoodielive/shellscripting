@@ -17,4 +17,4 @@ case "$1" in
 		log_end_msg 1
 		;;
 esac
-
+"You killed produs"
