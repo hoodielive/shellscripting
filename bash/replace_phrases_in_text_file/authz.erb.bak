@@ -1,32 +1,47 @@
 [puppet:/modules/nodes/apokueo_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/osanyin_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/aje_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/sango_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/ogun_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/osun_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/esu_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/obatala_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/oya_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/aseta_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/elegbara_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/obanina_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/iyaami_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/odu_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/damballah_local_awo]
+@flower = rw
 
 [puppet://modules/nodes/gedenimbo_local_awo]
-
+@flower = rw

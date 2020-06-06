@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-
+set -x
 
 for nodes in $(cat phrases.txt) ; do 
-	print $nodes; 
-sed -i.bak -e '/^\[puppet:\/\/modules\/nodes\/$nodes\]/d' authz.erb
-done > script.sh
+
+sed -i.bak '$nodes' authz.erb
+done
 

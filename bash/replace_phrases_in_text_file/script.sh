@@ -1,0 +1,16 @@
+apokueo_local_awo
+osanyin_local_awo
+aje_local_awo
+sango_local_awo
+ogun_local_awo
+osun_local_awo
+esu_local_awo
+obatala_local_awo
+oya_local_awo
+aseta_local_awo
+elegbara_local_awo
+obanina_local_awo
+iyaami_local_awo
+odu_local_awo
+damballah_local_awo
+gedenimbo_local_awo
