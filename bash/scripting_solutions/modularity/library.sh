@@ -1,5 +1,7 @@
 #!/bin/bash 
 
+set -x
+
 function create_file() 
 {
   local FNAME=$1
