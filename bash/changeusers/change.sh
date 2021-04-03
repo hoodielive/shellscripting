@@ -10,3 +10,6 @@ for dir in $PWD ; do
 
     chown -R "$username" "$dir"
 done
+
+#awk -F: -v user="$username" '{if($1 == user){print $6}}' < /etc/passwd
+
