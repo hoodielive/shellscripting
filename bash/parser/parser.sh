@@ -46,7 +46,8 @@ echo "Is this correct: yes or no?"
 echo
 read answer
 
-# If data is feasible, back up the original file and perform the substition.
+# If the user consents to changing the item specified within the file;
+# Perform the substition.
 
 if [ "$answer" == "yes" ]; then
     A="$replace_me" B="$replace_to" perl -pi.bak -e 's/\Q$ENV{A}\E/        $ENV{B}\,/g' $1
