@@ -1,4 +1,5 @@
 #!/bin/bash
+
 #set -x
 
 # Use Colors.
@@ -51,6 +52,22 @@ read answer
 
 if [ "$answer" == "yes" ]; then
     A="$replace_me" B="$replace_to" perl -pi.bak -e 's/\Q$ENV{A}\E/        $ENV{B}\,/g' $1
-else
-    echo "Exiting.."
+elif [ "$answer" == "no" ]; then
+    echo "Exiting..."
+    exit
 fi
+
+printf '%s\n' "Would you like to see that file now?"
+echo 
+echo "yes or no?"
+echo
+read answer
+
+if [ $answer == "yes" ]; then
+  cat $1 | less
+elif [ $answer == "y" ]; then
+  cat $1 | less
+else
+  exit 0
+fi
+
