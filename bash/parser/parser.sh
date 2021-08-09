@@ -57,7 +57,7 @@ elif [ "$answer" == "no" ]; then
     exit
 fi
 
-printf '%s\n' "Would you like to see that file now?"
+printf '%s\n' "Would you like to see that file?"
 echo 
 echo "yes or no?"
 echo
@@ -66,6 +66,10 @@ read answer
 if [ $answer == "yes" ]; then
   cat $1 | less
 elif [ $answer == "y" ]; then
+  cat $1 | less
+elif [ $answer == "no" ]; then
+  cat $1 | less
+elif [ $answer == "n" ]; then
   cat $1 | less
 else
   exit 0
