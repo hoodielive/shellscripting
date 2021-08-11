@@ -1,0 +1,10 @@
+#!/bin/bash 
+
+pr1()
+{
+  case $1 in
+    -w) pr_w= ;;
+    *) pr_w=-.${COLUMNS:-80} ;;
+  esac
+  printf "%${pr_w}s\n" "$@"
+}
