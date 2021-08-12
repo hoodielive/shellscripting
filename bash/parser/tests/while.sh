@@ -2,12 +2,12 @@
 
 #set -x
 
-# 
 unset SUB_LINE
 SUB_LINE=false
 
 echo "Do you want to change a string?"
 read answer
+echo
 
 if [ "$answer" == "yes" ]; then
   SUB_LINE=true
@@ -23,7 +23,6 @@ fi
 while [ "$SUB_LINE" == "true" ]; do
   printf '%s' $(awk 'NR=='$lineNumber'' $1)
   tobereplaced=$(awk 'NR=='$lineNumber'' $1)
-
   echo
   echo "Is this the line you want to change?"
   echo
@@ -31,11 +30,11 @@ while [ "$SUB_LINE" == "true" ]; do
   echo
   echo "What do you want it to change it to?"
   echo
-  read answer
-  printf '\n'
+  read changeitto
+  echo
 
   replace_me=$(printf '%s\n' "$tobereplaced" | sed 's:[][\\/.^$*]:\\&:g')
-  replace_to=$(printf '%s\n' "$answer" | sed 's:[\\/&]:\\&:g;!s/$/\\/')
+  replace_to=$(printf '%s\n' "$changeitto" | sed 's:[\\/&]:\\&:g;!s/$/\\/')
 
   # So as to give the user a clearly formatted statement.
 
@@ -51,8 +50,9 @@ while [ "$SUB_LINE" == "true" ]; do
   read answer
 
   # Perform Operation
-  if [ "$itit" == "yes" ]; then
+  if [ "$answer" == "yes" ]; then
       A="$replace_me" B="$replace_to" perl -pi.bak -e 's/\Q$ENV{A}\E/        $ENV{B}\,/g' $1
+      answer=no
   elif [ "$answer" == "no" ]; then
       SUB_LINE=false
   fi

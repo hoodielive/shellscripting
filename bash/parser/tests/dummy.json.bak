@@ -3,7 +3,7 @@
     "preferences": {
         "button_title_text": "Ready to start the update?",
         "button_sub_titletext": "Click on the button below.",
-        "cut_off_date":"2021-09-00:00",
+        "cut_off_date":"2022-10-12:OO",
         "cut_off_date_warning": 3,
         "days_between_notifications": 0,
         "logo_path": "/Library/Application Support/PATH/Red_and_Black.png",
